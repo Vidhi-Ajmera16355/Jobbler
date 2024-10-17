@@ -14,22 +14,25 @@ import { Loader2 } from 'lucide-react';
 
 const Login = () => {
     const [input, setInput] = useState({
-        email: "",
-        password: "",
-        role: ""
+        email: '',
+        password: '',
+        role: ''
     });
 
-    const { loading, user } = useSelector(store => store.auth);
+    const { loading, user } = useSelector((store) => store.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // Handle input changes
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     };
 
+    // Form submit handler
     const submitHandler = async (e) => {
         e.preventDefault();
 
+        // Check if any field is missing
         if (!input.email || !input.password || !input.role) {
             toast.error('Please fill in all fields');
             return;
@@ -37,31 +40,35 @@ const Login = () => {
 
         try {
             dispatch(setLoading(true));
+            // Make the API request
             const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
                 headers: { 'Content-Type': 'application/json' },
-                withCredentials: true, // This ensures cookies are sent if needed
+                withCredentials: true // Ensure cookies are sent
             });
 
+            // Check the response
             if (res.data.success) {
-                dispatch(setUser(res.data.user));
-                navigate('/');
-                toast.success(res.data.message);
+                dispatch(setUser(res.data.user)); // Store user in Redux
+                navigate('/'); // Redirect to homepage
+                toast.success(res.data.message); // Show success toast
             } else {
-                toast.error('Login failed. Please check your credentials and try again.');
+                throw new Error('Login failed. Check your credentials and try again.');
             }
         } catch (error) {
-            console.error('Error during login:', error.message); // Log the error message for better debugging
-            toast.error('An error occurred. Please try again later.');
+            // Log and show error toast
+            console.error('Error during login:', error.message);
+            toast.error(error.message || 'An error occurred. Please try again later.');
         } finally {
-            dispatch(setLoading(false));
+            dispatch(setLoading(false)); // Stop loading spinner
         }
     };
 
+    // Redirect if already logged in
     useEffect(() => {
         if (user) {
-            navigate('/')
+            navigate('/');
         }
-    }, [user, navigate]); // Ensure useEffect runs when `user` changes
+    }, [user, navigate]);
 
     return (
         <div>
@@ -76,60 +83,60 @@ const Login = () => {
                     </h1>
 
                     {/* Email Input */}
-                    <div className="mb-4">
-                        <Label className="text-sm font-semibold text-gray-600">Email</Label>
+                    <div className='mb-4'>
+                        <Label className='text-sm font-semibold text-gray-600'>Email</Label>
                         <Input
-                            type="email"
+                            type='email'
                             value={input.email}
-                            name="email"
+                            name='email'
                             onChange={changeEventHandler}
-                            placeholder="Enter your email"
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3702f8] focus:border-transparent"
+                            placeholder='Enter your email'
+                            className='mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3702f8] focus:border-transparent'
                         />
                     </div>
 
                     {/* Password Input */}
-                    <div className="mb-4">
-                        <Label className="text-sm font-semibold text-gray-600">Password</Label>
+                    <div className='mb-4'>
+                        <Label className='text-sm font-semibold text-gray-600'>Password</Label>
                         <Input
-                            type="password"
+                            type='password'
                             value={input.password}
-                            name="password"
+                            name='password'
                             onChange={changeEventHandler}
-                            placeholder="Enter your password"
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3702f8] focus:border-transparent"
+                            placeholder='Enter your password'
+                            className='mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3702f8] focus:border-transparent'
                         />
                     </div>
 
                     {/* Role Selection */}
-                    <div className="mb-6">
-                        <Label className="text-sm font-semibold text-gray-600">Select Your Role</Label>
-                        <RadioGroup className="flex items-center gap-6 mt-2">
-                            <div className="flex items-center">
+                    <div className='mb-6'>
+                        <Label className='text-sm font-semibold text-gray-600'>Select Your Role</Label>
+                        <RadioGroup className='flex items-center gap-6 mt-2'>
+                            <div className='flex items-center'>
                                 <Input
-                                    type="radio"
-                                    name="role"
-                                    value="student"
+                                    type='radio'
+                                    name='role'
+                                    value='student'
                                     checked={input.role === 'student'}
                                     onChange={changeEventHandler}
-                                    id="student"
-                                    className="cursor-pointer"
+                                    id='student'
+                                    className='cursor-pointer'
                                 />
-                                <Label htmlFor="student" className="ml-2 text-sm text-gray-600">
+                                <Label htmlFor='student' className='ml-2 text-sm text-gray-600'>
                                     Student
                                 </Label>
                             </div>
-                            <div className="flex items-center">
+                            <div className='flex items-center'>
                                 <Input
-                                    type="radio"
-                                    name="role"
-                                    value="recruiter"
+                                    type='radio'
+                                    name='role'
+                                    value='recruiter'
                                     checked={input.role === 'recruiter'}
                                     onChange={changeEventHandler}
-                                    id="recruiter"
-                                    className="cursor-pointer"
+                                    id='recruiter'
+                                    className='cursor-pointer'
                                 />
-                                <Label htmlFor="recruiter" className="ml-2 text-sm text-gray-600">
+                                <Label htmlFor='recruiter' className='ml-2 text-sm text-gray-600'>
                                     Recruiter
                                 </Label>
                             </div>
@@ -138,20 +145,26 @@ const Login = () => {
 
                     {/* Loading State Button */}
                     {loading ? (
-                        <Button className="w-full my-4 bg-gray-400 text-white rounded-md font-semibold transition duration-300 shadow-md" disabled>
+                        <Button
+                            className='w-full my-4 bg-gray-400 text-white rounded-md font-semibold transition duration-300 shadow-md'
+                            disabled
+                        >
                             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                             Please Wait
                         </Button>
                     ) : (
-                        <Button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg">
+                        <Button
+                            type='submit'
+                            className='w-full py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg'
+                        >
                             Log In
                         </Button>
                     )}
 
                     {/* Signup Link */}
-                    <div className="text-center mt-4">
-                        <span className="text-sm text-gray-600">Don't have an account?</span>
-                        <Link to="/signup" className='text-blue-600 font-medium ml-1 hover:underline'>
+                    <div className='text-center mt-4'>
+                        <span className='text-sm text-gray-600'>Don't have an account?</span>
+                        <Link to='/signup' className='text-blue-600 font-medium ml-1 hover:underline'>
                             Sign Up
                         </Link>
                     </div>
