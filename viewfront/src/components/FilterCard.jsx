@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { RadioGroup, RadioGroupItem } from './ui/radio-group'
-import { Label } from './ui/label'
-import { useDispatch } from 'react-redux'
-import { setSearchedQuery } from '@/redux/jobSlice'
+import React, { useEffect, useState } from 'react';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { Label } from './ui/label';
+import { useDispatch } from 'react-redux';
+import { setSearchedQuery } from '@/redux/jobSlice';
 
 const fitlerData = [
     {
@@ -30,23 +30,23 @@ const FilterCard = () => {
         dispatch(setSearchedQuery(selectedValue));
     }, [selectedValue]);
     return (
-        <div className='w-full bg-white p-3 rounded-md'>
-            <h1 className='font-bold text-lg'>Filter Jobs</h1>
+        <div className='w-full bg-gradient-to-r from-indigo-100 via-blue-50 to-indigo-200 p-5 rounded-lg shadow-lg'>
+            <h1 className='font-bold text-lg text-gray-800'>Filter Jobs</h1>
             <hr className='mt-3' />
             <RadioGroup value={selectedValue} onValueChange={changeHandler}>
                 {
                     fitlerData.map((data, index) => (
-                        <div>
-                            <h1 className='font-bold text-lg'>{data.fitlerType}</h1>
+                        <div key={index}>
+                            <h1 className='font-bold text-lg text-gray-700'>{data.fitlerType}</h1>
                             {
                                 data.array.map((item, idx) => {
-                                    const itemId = `id${index}-${idx}`
+                                    const itemId = `id${index}-${idx}`;
                                     return (
-                                        <div className='flex items-center space-x-2 my-2'>
+                                        <div className='flex items-center space-x-2 my-2' key={itemId}>
                                             <RadioGroupItem value={item} id={itemId} />
                                             <Label htmlFor={itemId}>{item}</Label>
                                         </div>
-                                    )
+                                    );
                                 })
                             }
                         </div>
@@ -54,7 +54,7 @@ const FilterCard = () => {
                 }
             </RadioGroup>
         </div>
-    )
+    );
 }
 
-export default FilterCard
+export default FilterCard;

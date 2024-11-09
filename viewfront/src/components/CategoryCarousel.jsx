@@ -16,27 +16,33 @@ const category = [
 const CategoryCarousel = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const searchJobHandler = (query) => {
         dispatch(setSearchedQuery(query));
         navigate("/browse");
     }
 
     return (
-        <div>
-            <Carousel className="w-full max-w-xl mx-auto my-20">
+        <div className="w-full max-w-7xl mx-auto px-4">
+            <h2 className="text-2xl font-semibold text-center mb-8">Explore Job Categories</h2>
+            <Carousel className="w-full">
                 <CarouselContent>
                     {
                         category.map((cat, index) => (
-                            <CarouselItem key={index} className="md:basis-1/2 lg-basis-1/3">
-                                <Button onClick={() => searchJobHandler(cat)} variant="outline" className="rounded-full">
+                            <CarouselItem key={index} className="flex justify-center items-center p-4">
+                                <Button
+                                    onClick={() => searchJobHandler(cat)}
+                                    variant="outline"
+                                    className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:scale-105 transform transition-all duration-300"
+                                >
                                     {cat}
                                 </Button>
                             </CarouselItem>
                         ))
                     }
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full hover:bg-gray-800 transition-all duration-200" />
+                <CarouselNext className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full hover:bg-gray-800 transition-all duration-200" />
             </Carousel>
         </div>
     )
